@@ -1,20 +1,20 @@
 # Use a lightweight base image
-FROM node:21-alpine
+FROM node:21-alpine AS build
 
 # Set the working directory in the container
 WORKDIR /app
 
 # Copy package.json and package-lock.json to the container
-COPY package.json package.json
+COPY package.json .
 
 # Install dependencies
-RUN npm install
+RUN npm install && npm cache clean --force && rm -rf /usr/local/share/.cache
 
 # Copy the application code to the container
 COPY . .
 
-# Expose the port on which the application will run
+# Expose the port on which the application will run (if applicable)
 EXPOSE 9981
 
 # Specify the command to run your application
-CMD ["node", "app.js"]
+CMD ["node","app.js"]
