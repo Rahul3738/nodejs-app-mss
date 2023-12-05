@@ -1,0 +1,20 @@
+# Use a lightweight base image
+FROM node:21-alpine
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json to the container
+COPY package.json package.json
+
+# Install dependencies
+RUN npm install
+
+# Copy the application code to the container
+COPY . .
+
+# Expose the port on which the application will run
+EXPOSE 9981
+
+# Specify the command to run your application
+CMD ["node", "app.js"]
