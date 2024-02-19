@@ -13,7 +13,7 @@ ENV PROJECT_HOME /app
 WORKDIR $PROJECT_HOME
 
 # Copy package.json and package-lock.json to the container
-COPY package*.json .
+COPY package.json .
 
 # Install dependencies
 RUN npm install && npm cache clean --force && rm -rf /usr/local/share/.cache
