@@ -1,0 +1,34 @@
+# Use a lightweight base image
+FROM node:21-alpine
+
+# Add metadata to the Docker image
+LABEL maintainer="Rahul Pardeshi" \
+      mail_id="rahulpardeshi@gmail.com" \
+      description="NodeJS Web Application"
+
+# Set the environment variable for the project home
+ENV PROJECT_HOME /app
+
+# Set the working directory inside the container
+WORKDIR $PROJECT_HOME
+
+# Copy package.json and package-lock.json to the container
+COPY package*.json .
+
+# Install dependencies
+RUN npm install && npm cache clean --force && rm -rf /usr/local/share/.cache
+
+# Copy the application code to the container
+COPY . .
+
+# Create a non-root user for running the application and change ownership of the project directory
+RUN adduser -D myuser && chown -R myuser:myuser $PROJECT_HOME
+
+# Switch to the non-root user
+USER myuser
+
+# Expose the port on which the application will run
+EXPOSE 9981
+
+# Specify the command to run your application
+CMD ["node","app.js"]
